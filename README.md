@@ -18,24 +18,18 @@
 
 ## 📌 Overview
 
-Offline Linux auditd rules & configuration auditor (CIS/STIG coverage)
+OAuditd is an offline, read-only auditor for the Linux audit daemon, reviewing auditd.conf and audit rules (rules.d, audit.rules) against CIS and DISA STIG expectations. Tolerant parsers mean malformed configs or rule syntax never crash the audit, and it can inspect a live host or a mounted image via --root. Findings are mapped to CIS / NIST AU-* / CWE with ready-to-paste remediation rules and a generated rules file.
 
 ---
 
 ## ✨ Features
 
-- Tolerant auditd.conf parser — duplicates, typos, invalid values, unknown keys never crash the audit
-- Tolerant audit rule parser (auditctl syntax) for rules.d/*.rules, audit.rules and --root trees
-- Storage & failure-mode review — disk_full_action, space_left/admin_space_left, max_log_file_action, num_logs, flush/freq, write_logs, log permissions
-- Immutable mode (-e 2), failure flag (-f), backlog (-b), backlog_wait_time and rate-limit (-r) checks
-- CIS Linux & DISA STIG coverage engine — identity, time-change, MAC policy, network env, logins, sessions, perm_mod, access, delete, mounts, modules, sudoers, privileged commands, audit-tool tamper
-- Syscall arch coverage (b64/b32), unknown syscalls, never-vs-always ordering, exclude-list blind spots
-- Duplicate / conflicting rule detection, key tags, rules.d ↔ audit.rules drift detection
-- Setuid/setgid binary discovery for --root trees
-- CIS / NIST AU-* / CWE mapping + remediation with ready-to-paste rule lines and a generated rules file
-- Exports TXT / Markdown / JSON / CSV / SARIF 2.1.0
-- Built-in --demo self-test, CI gates (--fail-on)
-- Read-only by design — never modifies the system
+- Tolerant parsers for auditd.conf and auditctl-syntax rule files
+- Storage and failure-mode review (disk_full_action, space_left, log perms)
+- Immutable mode, failure flag, backlog and rate-limit checks
+- CIS Linux and DISA STIG coverage across identity, time, MAC, logins and more
+- Duplicate/conflicting rule detection and rules.d ↔ audit.rules drift
+- CIS/NIST/CWE mapping, remediation rules and export TXT/MD/JSON/CSV/SARIF
 
 ---
 
@@ -49,7 +43,10 @@ Offline Linux auditd rules & configuration auditor (CIS/STIG coverage)
 ## 🚀 Usage
 
 ```bash
-./OAuditd
+./OAuditd --scan
+./OAuditd --rules /etc/audit/rules.d/ --baseline stig --fail-on high
+./OAuditd --root /mnt/image --scan --format json -o report.json
+./OAuditd --help
 ```
 
 ---
